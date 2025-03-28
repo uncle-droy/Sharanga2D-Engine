@@ -13,11 +13,11 @@
 
 - Mouse based input system
 - Function to get the required value for the argument passed in it for the respective 2d shape
-- Fix the SDL surfaces, learn and integrate it properly
 - Add a input system
 - Save memory feature integration to load and unload images and textures for example when a enemy goes out of screen, unload that image and free the memory
 - Sprite and image rendering
 - Collision system
+- Basic physics (force and velocity real time translation and updates)
 - Add more shapes
 - Sprite animation direct function, with arguments being a list storing the paths to the respective animated image frames No for loop
 - Tilemap creation system like: 
