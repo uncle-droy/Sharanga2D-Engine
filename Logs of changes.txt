@@ -42,3 +42,4 @@ CHANGED:
 
 • 28-03-2025:
 - Rectangles can now be rotated, but only about their center point
+- Sprites can now be added (only bitmaps - functionality has to be modified and extended)

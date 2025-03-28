@@ -64,15 +64,29 @@ void removeRectPerm(std::string name);
 int countTotalRectangles();
 
 // Function to create a new surface
-extern std::map<std::string, SDL_Surface*> surfaces;
+//extern std::map<std::string, SDL_Surface*> surfaces;
 //void createSurface(const std::string& name, int width, int height, int depth);
+
+// Function to load a texture from a file (sprite rendering)
+struct SpriteData {
+	const char* filepath;
+    SDL_Rect image_load_part;
+    SDL_FRect screen_render_part;
+    bool visible;
+    int depth;
+    float angle;
+};
+extern std::map<std::string, std::vector<SpriteData>> spritesMap;
+void loadSprite(std::string name, bool visible, const char* filepath, SDL_Rect image_load_part, SDL_FRect screen_render_part, int depth, float angle);
+void render2dSprite(const char* filepath, SDL_FRect screen_render_part, float angle);
+void renderAllSprites();
 
 // Function to handle keyboard input
 extern std::unordered_map<int, bool> keyState;
 extern std::unordered_map<int, bool> prevKeyState;
 bool processInput();
-bool ifKeyUp(const std::string& key);
-bool ifKeyDown(const std::string& key);
+bool KeyUp(const std::string& key);
+bool KeyDown(const std::string& key);
 
 // Function to shut down the engine
 void shutdownEngine();

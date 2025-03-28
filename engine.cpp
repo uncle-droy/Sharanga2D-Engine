@@ -12,7 +12,8 @@ using namespace std;
 
 //All maps and dicts
 std::map<std::string, vector<RectData>> rectangles;
-std::map<std::string, SDL_Surface*> surfaces;
+std::map<std::string, vector<SpriteData>> spritesMap;
+//std::map<std::string, SDL_Surface*> surfaces;
 
 //All variables and assignments
 SDL_Window* window = NULL;
@@ -332,6 +333,62 @@ void removeRectPerm(std::string name) {
 	rectangles.erase(name);
 }
 
+
+// Sprites
+
+// load sprite into memory
+void loadSprite(std::string name, bool visible, const char* filepath, SDL_Rect image_load_part, SDL_FRect screen_render_part, int depth, float angle) {
+    spritesMap[name].push_back({ filepath, image_load_part, screen_render_part, visible, depth, angle });
+}
+// Draw every sprites as per depth order at once
+void renderAllSprites() {
+    //std::cout << "Total Sprites: " << spritesMap.size() << std::endl;
+    std::vector<std::pair<int, std::string>> drawQueue;
+
+    // Step 1: Gather all (drawOrder, name) pairs
+    for (const auto& pair : spritesMap) {
+        if (!pair.second.empty()) {
+            drawQueue.push_back({ pair.second[0].depth, pair.first });
+        }
+    }
+
+    // Step 2: Draw in order of least drawOrder first
+    while (!drawQueue.empty()) {
+        // Find the rectangle with the lowest drawOrder
+        auto minIt = std::min_element(drawQueue.begin(), drawQueue.end(),
+            [](const auto& a, const auto& b) {
+                return a.first < b.first;
+            });
+
+        std::string minName = minIt->second;
+        drawQueue.erase(minIt); // Remove from the list
+
+        // Draw all rectangles belonging to this name
+        for (const auto& sprite : spritesMap[minName]) {
+
+            //std::cout << rect.surface + minName + "\n"; //Debug the z order
+            if (sprite.visible) {
+				render2dSprite(sprite.filepath, sprite.screen_render_part, sprite.angle );
+            }
+        }
+    }
+}
+
+// Render a single sprite
+void render2dSprite(const char* filepath, SDL_FRect screen_render_part, float angle) {
+		// Render the sprite
+    SDL_Surface* tempSurface = SDL_LoadBMP(filepath, "rb");
+    SDL_Texture* spriteTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+    SDL_FPoint* center = NULL;
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    //SDL_RenderCopyF(renderer, spriteTexture, &image_load_part, &screen_render_part);
+    SDL_RenderCopyExF(renderer, spriteTexture, NULL, &screen_render_part, angle, center, SDL_FLIP_NONE);
+    SDL_DestroyTexture(spriteTexture);
+}
+
+
+
 bool isRunning = true;
 bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE_HARDWARE_ACCELERATION) {
     //Initialize SDL
@@ -354,7 +411,7 @@ bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE
             else { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE); }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             defaultSurface = SDL_GetWindowSurface(window);
-            surfaces["default"] = defaultSurface;
+            //surfaces["default"] = defaultSurface;
         }
     }
 	return true;
@@ -412,11 +469,11 @@ bool processInput() {
 	return true; // Continue running
 }
 
-bool ifKeyDown(const std::string& key) {
+bool KeyDown(const std::string& key) {
     int scancode = getScancodeFromString(key);
     return keyState[scancode];
 }
-bool ifKeyUp(const std::string& key) {
+bool KeyUp(const std::string& key) {
     int scancode = getScancodeFromString(key);
     if (prevKeyState.count(scancode) && keyState.count(scancode)) {
         return prevKeyState[scancode] && !keyState[scancode];  // Detect key release
