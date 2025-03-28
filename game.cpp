@@ -20,7 +20,7 @@ int getRandomNumber(int min, int max) {
 int main(int argc, char* argv[]) {
     
     if (!initEngine("My Fruit Basket", 800, 550, true)) return -1;
-	bool running = false;
+	bool running = true;
 
     int random_x_coord = getRandomNumber(50, 750);
     std::cout<< "created first enemy" + enemy_str;

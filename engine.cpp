@@ -55,14 +55,14 @@ SDL_Scancode getScancodeFromString(const std::string & key) {
     if (key == "TAB") return SDL_SCANCODE_TAB;
     if (key == "BACKSPACE") return SDL_SCANCODE_BACKSPACE;
     if (key == "DELETE") return SDL_SCANCODE_DELETE;
-    if (key == "L_SHIFT") return SDL_SCANCODE_LSHIFT;
-    if (key == "L_CTRL") return SDL_SCANCODE_LCTRL;
-    if (key == "L_ALT") return SDL_SCANCODE_LALT;
+    if (key == "LSHIFT") return SDL_SCANCODE_LSHIFT;
+    if (key == "LCTRL") return SDL_SCANCODE_LCTRL;
+    if (key == "LALT") return SDL_SCANCODE_LALT;
     if (key == "LGUI") return SDL_SCANCODE_LGUI; // Windows / Command key (Mac)
     if (key == "RGUI") return SDL_SCANCODE_RGUI;
-    if (key == "R_SHIFT") return SDL_SCANCODE_RSHIFT;
-    if (key == "R_CTRL") return SDL_SCANCODE_RCTRL;
-    if (key == "R_ALT") return SDL_SCANCODE_RALT;
+    if (key == "RSHIFT") return SDL_SCANCODE_RSHIFT;
+    if (key == "RCTRL") return SDL_SCANCODE_RCTRL;
+    if (key == "RALT") return SDL_SCANCODE_RALT;
     if (key == "CAPSLOCK") return SDL_SCANCODE_CAPSLOCK;
 
     if (key == "PRINTSCREEN") return SDL_SCANCODE_PRINTSCREEN;
