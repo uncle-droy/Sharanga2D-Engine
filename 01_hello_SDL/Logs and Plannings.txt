@@ -1,0 +1,12 @@
+SOME INTRODUCIONS:
+I started this project on 23-03-2025, on the near end of all my exams. Planning was started since a few months ago.
+I watched LowLevelGameDev YT videos which motivated me towards creating my own engine.
+At first I wanted to make something real big, like follwoing the Cherno tutorials and building The Hazel Engine.
+But I thought to start with his opengl tutorial, for learning the basic, since I am very new to c++ (learnt the basics in just a week ;-})
+However unfortunately I couldn't understand his tutorials, so I thought to start with the learnopengl book.
+Again unfortunately by this time my important exams had come and I had to abandon programming for a while.
+I have just restarted programming on 23-03-25 given I have only 2 more important exams left.
+I have now fully focussed all my free time for the development of a new engine.
+To keep things simple I have started with SDL2 and am currently trying to build a simple 2D engine, with the help of:
+ChatGPT, YouTube tutorials, https://lazyfoo.net/tutorials/SDL/index.php#Hello%20SDL, and other online resources.
+Later on I have thought to add more complex systems like maybe physics, scene management, custom shapes scanned complex hitboxes, opengl integration, custom shaders, controller input system, and so on...

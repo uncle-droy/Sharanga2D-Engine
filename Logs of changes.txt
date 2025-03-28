@@ -1,0 +1,44 @@
+PROJECT STARTED ON: 23-03-2025
+
+CHANGED:
+
+• 23-03-2025:
+- Basic setup
+- Added ability to draw rectangles
+- Added ability to add multiples SDL surfaces
+
+
+• 24-03-2025:
+- Fixed drawing surfaces
+- Fixed drawing of rectangles on different surfaces
+- Fixed rectangle drawing
+
+
+• 25-03-2025:
+- Removed the background rectangle creation to give the SDL surface a good looking color, cause it doesn't makes sense to add another rectangle, else the draw order will be distorted when drawing other user defined rectangles
+- Removed loop to continuously run the engine to keep it awake, now the user will check for quit event in their game loop, and game will exit accordingly
+- Fixed drawing of rectangles with proper z-order, when overlapping may take place
+- User are given freedom to perform game operations (displaying rectangles for now) inside their own defined game loop, engine adjust automatically
+- Improved the way the overall game loop will work when the engine runs and renders everything
+
+! Add input system next
+
+
+• 26-03-2025:
+- Added function to draw or hide any rectangle at any time in the game loop
+- Added functions to get current time properties of rectangles drawn
+- Added functions to manipulate a rectangle's properties
+- Added function to permanantly remove a rectangle from draw queue and save some memory
+- Added keyboard input system (registers: pressed continously or just a single press)
+
+! Add rotation to rectangles, or skip it for now if too complex
+
+• 27-03-2025:
+- Removed the concept of surfaces entirely, as it was becoming to complicated to manage and limited a lot of other essential functionalities of the engine
+- Now using SDL Renderer to handle rendering
+- Users will now be able to run the program at a set FPS or implement their own mechanism for managing it
+
+! Aility to rotate rectangles will be added next
+
+• 28-03-2025:
+- Rectangles can now be rotated, but only about their center point

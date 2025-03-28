@@ -1,0 +1,48 @@
+• Implemented Features:
+
+- Window Opening, with user defined geometry size and title
+- Proper game loop integration and screen update function
+- Rendering with SDL Renderer
+- Hardware accelerated rendering available
+- Drawing multiple Rectangle shapes with z-order priority drawing Colors and sizes are also given
+- Keyboard input (pressed continously or just a single press)
+- Delete a rectangle from draw queue or modify it's properties at real time
+- Ability to ask for a rectangle's properties and modify it at real time
+
+! Pending Features (Crucial signature features):
+
+- Mouse based input system
+- Function to get the required value for the argument passed in it for the respective 2d shape
+- Fix the SDL surfaces, learn and integrate it properly
+- Add a input system
+- Save memory feature integration to load and unload images and textures for example when a enemy goes out of screen, unload that image and free the memory
+- Sprite and image rendering
+- Collision system
+- Add more shapes
+- Sprite animation direct function, with arguments being a list storing the paths to the respective animated image frames No for loop
+- Tilemap creation system like: 
+							
+								BBBBBBBBBBBBBBBBBBBBBBBBBB
+								B c		e	e			 B
+								B----------------H	o	 B
+								B				 H		 B
+								B  P	e		 I    e	 B
+								BBBBBBBBBBBBBBBBBBBBBBBBBB
+
+ with custom user defined rules like the respective sizes for each of the tile representated by each different letter as follows:
+ B = wall(height x width)
+ o = flying enemy
+ e = enemy
+ c = collectibles
+ P = Player position
+ H = Ladder
+ | = wall cum ladder
+
+
+? Advance features (may or may not be implemented):
+
+- Camera system
+- Pixel perfect hitboxe and collision system
+- Culling
+- Scene management and basic editor integration
+- Basic physics
