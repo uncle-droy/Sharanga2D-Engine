@@ -10,6 +10,7 @@ int score = 0;
 float angle = 0;
 float vel = 5.0;
 std::string enemy_str = "enemy" + std::to_string(enemy_number);
+
 int getRandomNumber(int min, int max) {
     std::random_device rd;  // Obtain a random seed
     std::mt19937 gen(rd()); // Seed the generator

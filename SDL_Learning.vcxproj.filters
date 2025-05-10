@@ -27,6 +27,9 @@
     <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="keybinds.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Logs of changes.txt" />
@@ -37,6 +40,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine.h">
+      <Filter>Source Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="keybinds.h">
       <Filter>Source Files\include</Filter>
     </ClInclude>
   </ItemGroup>
