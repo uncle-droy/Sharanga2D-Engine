@@ -3,6 +3,7 @@
 - Window Opening, with user defined geometry size and title
 - Proper game loop integration and screen update function
 - Rendering with SDL Renderer
+- Using the ECS architecture
 - Hardware accelerated rendering available
 - Drawing multiple Rectangle shapes with z-order priority drawing Colors and sizes are also given
 - Keyboard input (pressed continously or just a single press)

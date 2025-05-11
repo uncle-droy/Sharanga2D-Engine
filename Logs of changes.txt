@@ -48,3 +48,8 @@ CHANGED:
 - Modifying the entire engine to integrate ECS system.
 Reason: Both Game and Engine code becoming too huge.
 Changes still pending.
+
+• 11-05-2025:
+- Modifying the entire engine to integrate ECS system.
+Changes applied to rectangles only, more systems pending.
+- Keybinds list added to a separate file. (done yesterday)
