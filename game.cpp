@@ -13,6 +13,7 @@ float vel = 5.0;
 std::string enemy_str = "enemy" + std::to_string(enemy_number);
 float dt;
 double c;
+float velocity = 5;
 
 int getRandomNumber(int min, int max) {
     std::random_device rd;  // Obtain a random seed
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]) {
 	bool running = true;
 
     int random_x_coord = getRandomNumber(50, 750);
-    std::cout<< "created first enemy" + enemy_str;
+    //std::cout<< "created first enemy" + enemy_str;
     enemy_number++;
     
 
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]) {
 	reg.transformComponents[player] = { 100, 100, 0 };
     reg.rectShapeComponents[player] = { 50, 50, {255, 0, 0, 255}, 1, true};
     reg.velocityComponents[player] = { 0, 0 };
-    reg.accelerationComponents[player] = { 0, 9.8 };
+    reg.accelerationComponents[player] = { 0, 1 };
     
     
     loadSprite("basket", true, "assets/basket2.bmp", { 0, 0, 32, 32 }, { 100, 100, 32, 32 }, 1, 45);
@@ -53,14 +54,23 @@ int main(int argc, char* argv[]) {
 		
         if (KeyDown("RCTRL")) {
             printf("Right pressed\n");
-            //setRectPos("player", pos.first, pos.second);
+            reg.velocityComponents[player].vx = velocity;
         }
+        if (KeyUp("RCTRL")) {
+            reg.velocityComponents[player].vx = 0;
+        }
+
+        if (reg.velocityComponents[player].vy >= 2) {
+            reg.accelerationComponents.erase(player);
+            reg.velocityComponents[player].vy = 0;
+        }
+
         renderRectShape(reg);
         //c += 0.1f;
 		dt = getDeltaTime();
         updateMovement(dt, reg);
-        std::cout << dt;
-        printf("\n");
+        //std::cout << dt;
+        //printf("\n");
 
         renderAllSprites();
         updateKeyStates();
