@@ -2,6 +2,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
+
 #include <functional>
 using namespace std;
 
@@ -10,6 +11,8 @@ int score = 0;
 float angle = 0;
 float vel = 5.0;
 std::string enemy_str = "enemy" + std::to_string(enemy_number);
+float dt;
+double c;
 
 int getRandomNumber(int min, int max) {
     std::random_device rd;  // Obtain a random seed
@@ -20,13 +23,14 @@ int getRandomNumber(int min, int max) {
 
 
 int main(int argc, char* argv[]) {
-    
+
     if (!initEngine("My Fruit Basket", 800, 550, true)) return -1;
 	bool running = true;
 
     int random_x_coord = getRandomNumber(50, 750);
     std::cout<< "created first enemy" + enemy_str;
     enemy_number++;
+    
 
     //Render the rectangle
 
@@ -37,7 +41,8 @@ int main(int argc, char* argv[]) {
 	Entity player = createEntity();
 	reg.transformComponents[player] = { 100, 100, 0 };
     reg.rectShapeComponents[player] = { 50, 50, {255, 0, 0, 255}, 1, true};
-
+    reg.velocityComponents[player] = { 0, 0 };
+    reg.accelerationComponents[player] = { 0, 9.8 };
     
     
     loadSprite("basket", true, "assets/basket2.bmp", { 0, 0, 32, 32 }, { 100, 100, 32, 32 }, 1, 45);
@@ -51,6 +56,12 @@ int main(int argc, char* argv[]) {
             //setRectPos("player", pos.first, pos.second);
         }
         renderRectShape(reg);
+        //c += 0.1f;
+		dt = getDeltaTime();
+        updateMovement(dt, reg);
+        std::cout << dt;
+        printf("\n");
+
         renderAllSprites();
         updateKeyStates();
         setFrameRate(60);

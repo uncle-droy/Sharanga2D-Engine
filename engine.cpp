@@ -12,6 +12,8 @@
 
 //#include <bits/stdc++.h>
 using namespace std;
+Uint32 lastFrameTime;
+float deltaTime;
 
 //All maps and dicts
 //std::map<std::string, vector<RectData>> rectangles;
@@ -27,171 +29,6 @@ int frameTime;
 Uint32 frameStart;
 
 //Functions
-
-
-//void createSurface(const std::string& name, int width, int height, int depth) {
-//    SDL_Surface* newSurface = SDL_CreateRGBSurface(0, width, height, depth, 0, 0, 0, 0);
-//    //SDL_SetSurfaceBlendMode(newSurface, SDL_BLENDMODE_BLEND);
-//    if (newSurface) {
-//        surfaces[name] = newSurface;
-//        SDL_BlitSurface(newSurface, NULL, defaultSurface, NULL);
-//        SDL_UpdateWindowSurface(window);
-//    }
-//    else {
-//        printf("Failed to create surface: %s\n", SDL_GetError());
-//    }
-//}
-
-
-//void createRectangles(std::string name, bool visible, float x, float y, float w, float h, int drawOrder, float angle, SDL_Color color) {
-//    if (rectangles.count(name) == 0) {
-//        rectangles[name] = {};
-//    }
-//    rectangles[name].push_back({visible, x, y, w, h, drawOrder, angle, color});
-//}
-//
-////Function to draw all rectangles when called from game loop
-//void drawAllRects() {
-//
-//    //std::cout << "Total Rectangles: " << rectangles.size() << std::endl;
-//    std::vector<std::pair<int, std::string>> drawQueue;
-//
-//    // Step 1: Gather all (drawOrder, name) pairs
-//    for (const auto& pair : rectangles) {
-//        if (!pair.second.empty()) {
-//            drawQueue.push_back({ pair.second[0].drawOrder, pair.first });
-//        }
-//    }
-//
-//    // Step 2: Draw in order of least drawOrder first
-//    while (!drawQueue.empty()) {
-//        // Find the rectangle with the lowest drawOrder
-//        auto minIt = std::min_element(drawQueue.begin(), drawQueue.end(),
-//            [](const auto& a, const auto& b) {
-//                return a.first < b.first;
-//            });
-//
-//        std::string minName = minIt->second;
-//        drawQueue.erase(minIt); // Remove from the list
-//
-//        // Draw all rectangles belonging to this name
-//        for (const auto& rect : rectangles[minName]) {
-//            
-//            //std::cout << rect.surface + minName + "\n"; //Debug the z order
-//            if (rect.visible) {
-//				drawRect2d(rect.x, rect.y, rect.w, rect.h, rect.angle, rect.color);
-//            }
-//        }
-//    }
-//    //updateScreen();
-//    SDL_RenderPresent(renderer);
-//}
-//
-//void drawRect2d(float x, float y, float w, float h, float angle, SDL_Color color) {
-//
-//    /*SDL_FRect fillRect = { x, y, w, h };/
-//    SDL_SetSurfaceBlendMode(defaultSurface, SDL_BLENDMODE_BLEND);
-//    Uint32 mappedColor = SDL_MapRGBA(surface->format, color.r, color.g, color.b, color.a);
-//    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-//    SDL_RenderFillRectF(renderer, &fillRect);*/
-//
-//    if (angle == 0.0) {
-//		SDL_FRect dstRect = { x, y, w, h };
-//      SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-//		SDL_RenderFillRectF(renderer, &dstRect);
-//	}
-//
-//    else {
-//        SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
-//        SDL_SetRenderTarget(renderer, texture);
-//        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-//        SDL_RenderClear(renderer);
-//        SDL_SetRenderTarget(renderer, NULL);
-//        SDL_FRect dstRect = { x, y, w, h };
-//        SDL_FPoint center = { w / 2, h / 2 }; // Rotation pivot (center of the rectangle)	
-//        SDL_RenderCopyExF(renderer, texture, NULL, &dstRect, angle, &center, SDL_FLIP_NONE);
-//        SDL_DestroyTexture(texture);
-//}
-//}
-//
-//int countTotalRectangles() {
-//	return rectangles.size();
-//}
-//
-//std::pair <float, float> getRectPosition(std::string name) {
-//	if (rectangles.count(name) == 0) {
-//		return { -1, -1 }; // Return (-1, -1) if rectangle not found
-//	}
-//	else {
-//		return { rectangles[name][0].x, rectangles[name][0].y };
-//	}
-//}
-//
-////get size of the recctangle
-//std::pair <float, float > getRectSize(std::string name) {
-//	if (rectangles.count(name) == 0) {
-//		return { -1, -1 }; // Return (-1, -1) if rectangle not found
-//	}
-//	else {
-//		return { rectangles[name][0].w, rectangles[name][0].h };
-//	}
-//}
-//
-//void setRectPos(std::string name, float x, float y) {
-//	if (rectangles.count(name) == 0) {
-//		return; // Return if rectangle not found
-//	}
-//    else {
-//        rectangles[name][0].x = x;
-//        rectangles[name][0].y = y;
-//    }
-//  
-//}
-//void setRectSize(std::string name, float width, float height) {
-//    if (rectangles.count(name) == 0) {
-//        return; // Return if rectangle not found
-//    }
-//    else {
-//		rectangles[name][0].w = width;
-//        rectangles[name][0].h = height;
-//    }
-//}
-//
-//void rotateRect(std::string name, float angle) {
-//	rectangles[name][0].angle = angle;
-//}
-//
-//void setRectColor(std::string name, SDL_Color color) { // Angle in degrees
-//
-//	if (rectangles.count(name) == 0) {
-//		return; // Return if rectangle not found
-//	}
-//	else {
-//		rectangles[name][0].color = color;
-//	}
-//}
-//
-//void setRectDrawOrder(std::string name, int drawOrder) {
-//	if (rectangles.count(name) == 0) {
-//		return; // Return if rectangle not found
-//	}
-//    else {
-//		rectangles[name][0].drawOrder = drawOrder;
-//    }
-//}
-//
-//void setRectVisibility(std::string name, bool visible) {
-//	if (rectangles.count(name) == 0) {
-//		return; // Return if rectangle not found
-//	}
-//	else {
-//		rectangles[name][0].visible = visible;
-//	}
-//}
-
-//void removeRectPerm(std::string name) {
-//	rectangles.erase(name);
-//}
 
 
 // Sprites
@@ -267,6 +104,7 @@ bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE
             printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         }
         else {
+            lastFrameTime = SDL_GetTicks();
             if (USE_HARDWARE_ACCELERATION) { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); }
             else { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE); }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -291,9 +129,10 @@ void setFrameRate(int fps) {
 void updateScreen(){
     
     //SDL_UpdateWindowSurface(window);
-
+    
     frameStart = SDL_GetTicks();
     SDL_RenderPresent(renderer);
+    
     
 }
 
@@ -360,30 +199,6 @@ Entity createEntity() {
     return currentId++;
 }
 
-//struct TransformComponent {
-//    float x, y;
-//    float rotation; // degrees
-//};
-//
-//struct VelocityComponent {
-//    float vx, vy;
-//};
-//
-//struct RectShapeComponent {
-//    float width, height;
-//    SDL_Color color;
-//    int  drawOrder;
-//    bool visible;
-//};
-//
-//
-//struct registry {
-//
-//    std::unordered_map<Entity, TransformComponent> transformComponents;
-//    std::unordered_map<Entity, VelocityComponent> velocityComponents;
-//    std::unordered_map<Entity, RectShapeComponent> rectShapeComponents;
-//    std::vector<std::pair<Entity, RectShapeComponent*>> drawList;
-//};
 registry reg;
 
 
@@ -397,24 +212,41 @@ void SortRectangles(registry& reg) {
     std::sort(reg.drawList.begin(), reg.drawList.end(), [](auto& a, auto& b) {
         return a.second->drawOrder < b.second->drawOrder;
         });
-
 }
-
-    
 
 void updateMovement(float deltaTime, registry& reg) {
     for (int entity = 1; entity <= max_entity; entity++) {
-        if (reg.transformComponents.find(entity) != reg.transformComponents.end() and reg.rectShapeComponents[entity].visible) {
-            auto& transform = reg.transformComponents[entity];
-            auto& velocity = reg.velocityComponents[entity];
-            transform.x += velocity.vx * deltaTime;
-            transform.y += velocity.vy * deltaTime;
+		if (reg.transformComponents.find(entity) != reg.transformComponents.end()
+			and reg.velocityComponents.find(entity) != reg.velocityComponents.end()
+            and reg.accelerationComponents.find(entity) == reg.accelerationComponents.end()) {
+			auto& transform = reg.transformComponents[entity];
+			auto& velocity = reg.velocityComponents[entity];
+			transform.x += velocity.vx * deltaTime;
+			transform.y += velocity.vy * deltaTime;
+            printf("Only velocity");
+		}
+        else if (reg.transformComponents.find(entity) != reg.transformComponents.end() and
+            reg.velocityComponents.find(entity) != reg.velocityComponents.end() and
+            reg.accelerationComponents.find(entity) != reg.accelerationComponents.end()) {
+			auto& transform = reg.transformComponents[entity];
+			auto& velocity = reg.velocityComponents[entity];
+            auto& acceleration = reg.accelerationComponents[entity];
+            printf("Accelerated");
+
+            velocity.vx += acceleration.ax * deltaTime;
+            velocity.vy += acceleration.ay * deltaTime;
+
+            transform.x += 0.5 * acceleration.ax * deltaTime * deltaTime;
+            transform.y += 0.5 * acceleration.ay * deltaTime * deltaTime;
+
         }
     }
 }
 
 
 void renderRectShape(registry& reg) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
     SortRectangles(reg);
     for (auto& pair : reg.drawList) {
         Entity entity = pair.first;
@@ -438,4 +270,11 @@ void renderRectShape(registry& reg) {
                 }
         }
     }
+}
+
+float getDeltaTime() {
+	Uint32 currentFrameTime = SDL_GetTicks();
+	deltaTime = (currentFrameTime) / 1000.0f; // convert to seconds
+	//lastFrameTime = currentFrameTime;
+    return deltaTime;
 }
