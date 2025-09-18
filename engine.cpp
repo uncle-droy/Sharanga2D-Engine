@@ -86,7 +86,6 @@ void render2dSprite(const char* filepath, SDL_FRect screen_render_part, float an
 }
 
 
-
 bool isRunning = true;
 bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE_HARDWARE_ACCELERATION) {
     //Initialize SDL
