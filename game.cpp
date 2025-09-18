@@ -34,43 +34,66 @@ int main(int argc, char* argv[]) {
     
 
     //Render the rectangle
+	Entity dum = createEntity();
+	reg.transformComponents[dum] = { 100, 100, 0 };
+	reg.rectShapeComponents[dum] = createRectShape(50, 50, { 255, 0, 0, 255 }, 1, true);
+	reg.velocityComponents[dum] = { 2, 5 };
+	//reg.accelerationComponents[dum] = { 0, 0 };
 
-	Entity overlapper = createEntity();
-	reg.transformComponents[overlapper] = { 120, 120, 0 };
-	reg.rectShapeComponents[overlapper] = { 50, 50, {0, 255, 0}, 2, true };
+    Entity background = createEntity();
+    reg.rectShapeComponents[background] = createRectShape(800, 550, { 120, 60, 255, 255 }, 0, true);
+    reg.transformComponents[background] = { 0, 0, 10 };
+	reg.velocityComponents[background] = { 3, 3 };
+	//reg.accelerationComponents[background] = { 0, 0 };
 
-	Entity player = createEntity();
-	reg.transformComponents[player] = { 100, 100, 0 };
-    reg.rectShapeComponents[player] = { 50, 50, {255, 0, 0, 255}, 1, true};
-    reg.velocityComponents[player] = { 0, 0 };
-    reg.accelerationComponents[player] = { 0, 1 };
-    
-    
+    Entity o = createEntity();
+	reg.rectShapeComponents[o] = createRectShape(50, 50, { 120, 250, 25, 255 }, 2, true);
+	reg.transformComponents[o] = { 60, 60, 10 };
+	reg.velocityComponents[o] = { 0, 0 };
+    //reg.accelerationComponents[o] = { 0, 0 };
+
     loadSprite("basket", true, "assets/basket2.bmp", { 0, 0, 32, 32 }, { 100, 100, 32, 32 }, 1, 45);
     
     while (running)
     {
-        running = processInput();
-		
-        if (KeyDown("RCTRL")) {
-            printf("Right pressed\n");
-            reg.velocityComponents[player].vx = velocity;
-        }
-        if (KeyUp("RCTRL")) {
-            reg.velocityComponents[player].vx = 0;
-        }
+        running = processInput();      
 
-        if (reg.velocityComponents[player].vy >= 2) {
+        if (KeyDown("A")) {
+            //reg.transformComponents[o].x += 2;
+            reg.velocityComponents[o].vx = -100;
+            //reg.accelerationComponents[o].ax = 1;
+            reg.transformComponents[o].rotation += 80;
+            cout << reg.velocityComponents[o].vx;
+            //printf("Down");
+        }
+        else if (KeyUp("A")) {
+            //reg.accelerationComponents[o].ax = 0;
+            reg.velocityComponents[o].vx = 0;
+            //reg.accelerationComponents[o].ax = 0;
+            //printf("up");
+        }
+		if (KeyDown("D")) {
+			reg.velocityComponents[o].vx = 100;
+            //reg.accelerationComponents[o].ax = -1;
+			reg.transformComponents[o].rotation -= 80;
+            cout << reg.velocityComponents[o].vx;
+			//printf("Down");
+		}
+		else if (KeyUp("D")) {
+			reg.velocityComponents[o].vx = 0;
+            //reg.accelerationComponents[o].ax = 0;
+			//printf("up");
+		}
+
+        /*if (reg.velocityComponents[player].vy >= 15) {
             reg.accelerationComponents.erase(player);
             reg.velocityComponents[player].vy = 0;
-        }
+            
+        }*/
 
         renderRectShape(reg);
-        //c += 0.1f;
 		dt = getDeltaTime();
         updateMovement(dt, reg);
-        //std::cout << dt;
-        //printf("\n");
 
         renderAllSprites();
         updateKeyStates();
