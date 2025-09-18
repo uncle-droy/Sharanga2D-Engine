@@ -3,20 +3,20 @@
 - Window Opening, with user defined geometry size and title
 - Proper game loop integration and screen update function
 - Rendering with SDL Renderer
+- Using the ECS architecture
 - Hardware accelerated rendering available
 - Drawing multiple Rectangle shapes with z-order priority drawing Colors and sizes are also given
 - Keyboard input (pressed continously or just a single press)
 - Delete a rectangle from draw queue or modify it's properties at real time
 - Ability to ask for a rectangle's properties and modify it at real time
+- Sprite rendering (has to be improved)
+- Support for keyboard input
 
 ! Pending Features (Crucial signature features):
-
+- Function to get the required value and modify for the argument passed in it for sprites 
 - Mouse based input system
-- Function to get the required value for the argument passed in it for the respective 2d shape
-- Add a input system
-- Save memory feature integration to load and unload images and textures for example when a enemy goes out of screen, unload that image and free the memory
-- Sprite and image rendering
-- Collision system
+- Save memory feature integration to load and unload images and textures for example when a enemy goes out of screen, unload that image and free the memory - Working currently
+- Collision system (basic: sprite-sprite, shape-sprite, shape-shape)
 - Basic physics (force and velocity real time translation and updates)
 - Add more shapes
 - Sprite animation direct function, with arguments being a list storing the paths to the respective animated image frames No for loop
