@@ -1,4 +1,4 @@
-#include <\Users\DAIWIK\Development\CPP Projects\SDL_Learning\engine.h>
+﻿#include <\Users\DAIWIK\Development\CPP Projects\SDL_Learning\engine.h>
 #include <SDL.h>
 #include <stdio.h>
 #include <unordered_map>
@@ -26,6 +26,7 @@ SDL_Renderer* renderer = NULL;
 SDL_Surface* defaultSurface = NULL;
 int frameDelay = 0;
 int frameTime;
+int oldTime = 0;
 Uint32 frameStart;
 
 //Functions
@@ -65,7 +66,7 @@ void renderAllSprites() {
 
             //std::cout << rect.surface + minName + "\n"; //Debug the z order
             if (sprite.visible) {
-				render2dSprite(sprite.filepath, sprite.screen_render_part, sprite.angle );
+                render2dSprite(sprite.filepath, sprite.screen_render_part, sprite.angle);
             }
         }
     }
@@ -73,7 +74,7 @@ void renderAllSprites() {
 
 // Render a single sprite
 void render2dSprite(const char* filepath, SDL_FRect screen_render_part, float angle) {
-		// Render the sprite
+    // Render the sprite
     SDL_Surface* tempSurface = SDL_LoadBMP(filepath, "rb");
     SDL_Texture* spriteTexture = SDL_CreateTextureFromSurface(renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
@@ -83,7 +84,6 @@ void render2dSprite(const char* filepath, SDL_FRect screen_render_part, float an
     SDL_RenderCopyExF(renderer, spriteTexture, NULL, &screen_render_part, angle, center, SDL_FLIP_NONE);
     SDL_DestroyTexture(spriteTexture);
 }
-
 
 
 bool isRunning = true;
@@ -97,7 +97,7 @@ bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE
     {
         //Create window
         window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        
+
 
         if (window == NULL)
         {
@@ -109,11 +109,16 @@ bool initEngine(const char* TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool USE
             else { renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE); }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             defaultSurface = SDL_GetWindowSurface(window);
+            SDL_RendererInfo info;
+            SDL_GetRendererInfo(renderer, &info);
+            if (info.flags & SDL_RENDERER_ACCELERATED) {
+                // Uses GPU
+            }
             //surfaces["default"] = defaultSurface;
         }
     }
-	return true;
-	isRunning = false;
+    return true;
+    isRunning = false;
 }
 
 
@@ -126,14 +131,14 @@ void setFrameRate(int fps) {
         frameDelay = 0; // No delay, runs as fast as possible
 }
 
-void updateScreen(){
-    
+void updateScreen() {
+
     //SDL_UpdateWindowSurface(window);
-    
+
     frameStart = SDL_GetTicks();
     SDL_RenderPresent(renderer);
-    
-    
+
+
 }
 
 void forceFrameLimit() {
@@ -165,7 +170,7 @@ bool processInput() {
             printf("quitting");
         }
     }
-	return true; // Continue running
+    return true; // Continue running
 }
 
 bool KeyDown(const std::string& key) {
@@ -184,7 +189,7 @@ void updateKeyStates() {
     prevKeyState = keyState;
 }
 void shutdownEngine() {
-	//Destroy window
+    //Destroy window
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -201,6 +206,46 @@ Entity createEntity() {
 
 registry reg;
 
+void updateMovement(float deltaTime, registry& reg) {
+    for (int entity = 1; entity <= max_entity; entity++) {
+        if (reg.transformComponents.find(entity) != reg.transformComponents.end()
+            && reg.velocityComponents.find(entity) != reg.velocityComponents.end()
+            && reg.accelerationComponents.find(entity) == reg.accelerationComponents.end()) {
+
+            auto& transform = reg.transformComponents[entity];
+            auto& velocity = reg.velocityComponents[entity];
+
+            // Just use deltaTime
+            transform.x += velocity.vx * deltaTime;
+            transform.y += velocity.vy * deltaTime;
+
+            // Debug
+            printf("Only velocity\n");
+        }
+
+        else if (reg.transformComponents.find(entity) != reg.transformComponents.end()
+            && reg.velocityComponents.find(entity) != reg.velocityComponents.end()
+            && reg.accelerationComponents.find(entity) != reg.accelerationComponents.end()) {
+
+            auto& transform = reg.transformComponents[entity];
+            auto& velocity = reg.velocityComponents[entity];
+            auto& acceleration = reg.accelerationComponents[entity];
+
+            // Update velocity
+            velocity.vx += acceleration.ax * deltaTime;
+            velocity.vy += acceleration.ay * deltaTime;
+
+            // Update position using kinematics
+            transform.x += velocity.vx * deltaTime + 0.5f * acceleration.ax * deltaTime * deltaTime;
+            transform.y += velocity.vy * deltaTime + 0.5f * acceleration.ay * deltaTime * deltaTime;
+
+            // Debug
+            std::cout << (velocity.vx + velocity.vy) << "\n";
+        }
+    }
+}
+
+
 
 void SortRectangles(registry& reg) {
     for (auto& pair : reg.rectShapeComponents) {
@@ -214,67 +259,89 @@ void SortRectangles(registry& reg) {
         });
 }
 
-void updateMovement(float deltaTime, registry& reg) {
-    for (int entity = 1; entity <= max_entity; entity++) {
-		if (reg.transformComponents.find(entity) != reg.transformComponents.end()
-			and reg.velocityComponents.find(entity) != reg.velocityComponents.end()
-            and reg.accelerationComponents.find(entity) == reg.accelerationComponents.end()) {
-			auto& transform = reg.transformComponents[entity];
-			auto& velocity = reg.velocityComponents[entity];
-			transform.x += velocity.vx * deltaTime;
-			transform.y += velocity.vy * deltaTime;
-            printf("Only velocity");
-		}
-        else if (reg.transformComponents.find(entity) != reg.transformComponents.end() and
-            reg.velocityComponents.find(entity) != reg.velocityComponents.end() and
-            reg.accelerationComponents.find(entity) != reg.accelerationComponents.end()) {
-			auto& transform = reg.transformComponents[entity];
-			auto& velocity = reg.velocityComponents[entity];
-            auto& acceleration = reg.accelerationComponents[entity];
-            printf("Accelerated");
 
-            velocity.vx += acceleration.ax * deltaTime;
-            velocity.vy += acceleration.ay * deltaTime;
-
-            transform.x += 0.5 * acceleration.ax * deltaTime * deltaTime;
-            transform.y += 0.5 * acceleration.ay * deltaTime * deltaTime;
-
-        }
-    }
+RectShapeComponent createRectShape(float width, float height, SDL_Color color, int drawOrder = 0, bool visible = true) {
+    RectShapeComponent rect;
+    rect.width = width;
+    rect.height = height;
+    rect.color = color;
+    rect.drawOrder = drawOrder;
+    rect.visible = visible;
+    // texture and textureNeedsUpdate are untouched (managed internally)
+    return rect;
 }
 
+void UpdateRectTexture(RectShapeComponent& rect) {
+    if (rect.texture) {
+        SDL_DestroyTexture(rect.texture);
+    }
+
+    rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        (int)rect.width, (int)rect.height);
+
+    SDL_SetRenderTarget(renderer, rect.texture);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0); // transparent
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, rect.color.r, rect.color.g, rect.color.b, rect.color.a);
+    SDL_FRect fill = { 0, 0, rect.width, rect.height };
+    SDL_RenderFillRectF(renderer, &fill);
+    SDL_SetRenderTarget(renderer, nullptr);
+
+    rect.textureNeedsUpdate = false;
+}
 
 void renderRectShape(registry& reg) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+
     SortRectangles(reg);
+
     for (auto& pair : reg.drawList) {
         Entity entity = pair.first;
-        if (reg.transformComponents.find(entity) != reg.transformComponents.end()) {
+
+        if (reg.transformComponents.find(entity) != reg.transformComponents.end() && reg.rectShapeComponents.find(entity) != reg.rectShapeComponents.end()) {
             auto& transform = reg.transformComponents[entity];
             auto& rect = reg.rectShapeComponents[entity];
 
             SDL_FRect dst = { transform.x, transform.y, rect.width, rect.height };
             SDL_SetRenderDrawColor(renderer, rect.color.r, rect.color.g, rect.color.b, rect.color.a);
-                if (transform.rotation == 0.0) {
-                    SDL_RenderFillRectF(renderer, &dst);
-                }
-                else {
-                    SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, (int)rect.width, (int)rect.height);
-                    SDL_RenderClear(renderer);
-                    SDL_SetRenderTarget(renderer, NULL);
-                    SDL_FPoint center = { rect.width / 2, rect.height / 2 };
-                    SDL_RenderCopyExF(renderer, texture, NULL, &dst, transform.rotation, &center, SDL_FLIP_NONE);
-                    SDL_DestroyTexture(texture);
 
+            if (transform.rotation == 0.0f) {
+                SDL_RenderFillRectF(renderer, &dst);
+            }
+            else {
+                if (rect.textureNeedsUpdate || rect.texture == nullptr) {
+                    UpdateRectTexture(rect);
                 }
+
+                SDL_FPoint center = { rect.width / 2, rect.height / 2 };
+                SDL_RenderCopyExF(renderer, rect.texture, nullptr, &dst, transform.rotation, &center, SDL_FLIP_NONE);
+            }
+        }
+    }
+
+    SDL_RenderPresent(renderer);
+}
+void cleanupTextures(registry& reg) {
+    for (auto& pair : reg.rectShapeComponents) {
+        Entity entity = pair.first;
+        auto& rect = pair.second;
+        if (rect.texture) {
+            SDL_DestroyTexture(rect.texture);
+            rect.texture = nullptr;
         }
     }
 }
 
+
+
 float getDeltaTime() {
-	Uint32 currentFrameTime = SDL_GetTicks();
-	deltaTime = (currentFrameTime) / 1000.0f; // convert to seconds
-	//lastFrameTime = currentFrameTime;
+    static Uint32 lastFrameTime = 0; // keep track of previous frame
+    Uint32 currentFrameTime = SDL_GetTicks();
+
+    float deltaTime = (currentFrameTime - lastFrameTime) * 0.001f; // ms → seconds
+
+    lastFrameTime = currentFrameTime; // update for next call
     return deltaTime;
 }
+

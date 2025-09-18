@@ -30,7 +30,7 @@ using Entity = std::size_t;
 Entity createEntity();
 extern Entity max_entity;
 
-
+struct RectShapeComponent;
 
 struct TransformComponent {
 	float x, y;
@@ -45,19 +45,12 @@ struct AccelerationComponent {
 	float ax, ay;
 };
 
-struct RectShapeComponent {
-	float width, height;
-	SDL_Color color;
-	int  drawOrder;
-	bool visible;
-};
-
 struct registry {
 
 	std::unordered_map<Entity, TransformComponent> transformComponents;
 	std::unordered_map<Entity, VelocityComponent> velocityComponents;
 	std::unordered_map<Entity, AccelerationComponent> accelerationComponents;
-	
+
 	std::unordered_map<Entity, RectShapeComponent> rectShapeComponents;
 	std::vector<std::pair<Entity, RectShapeComponent*>> drawList;
 };
@@ -67,6 +60,23 @@ void updateMovement(float deltaTime, registry& reg);
 void renderRectShape(registry& reg);
 
 
+struct RectShapeComponent {
+	float width, height;
+	SDL_Color color;  // default white
+	int drawOrder;
+	bool visible;
+
+private:
+	SDL_Texture* texture = nullptr;
+	bool textureNeedsUpdate = true;
+
+	friend void UpdateRectTexture(RectShapeComponent&);
+	friend void renderRectShape(registry&);
+	friend void cleanupTextures(registry&);
+};
+RectShapeComponent createRectShape(float width, float height, SDL_Color color, int drawOrder, bool visible);
+
+
 // Function to create a new surface
 extern std::map<std::string, SDL_Surface*> surfaces;
 //void createSurface(const std::string& name, int width, int height, int depth);
@@ -74,11 +84,11 @@ extern std::map<std::string, SDL_Surface*> surfaces;
 // Function to load a texture from a file (sprite rendering)
 struct SpriteData {
 	const char* filepath;
-    SDL_Rect image_load_part;
-    SDL_FRect screen_render_part;
-    bool visible;
-    int depth;
-    float angle;
+	SDL_Rect image_load_part;
+	SDL_FRect screen_render_part;
+	bool visible;
+	int depth;
+	float angle;
 };
 extern std::map<std::string, std::vector<SpriteData>> spritesMap;
 void loadSprite(std::string name, bool visible, const char* filepath, SDL_Rect image_load_part, SDL_FRect screen_render_part, int depth, float angle);
