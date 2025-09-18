@@ -30,7 +30,7 @@ using Entity = std::size_t;
 Entity createEntity();
 extern Entity max_entity;
 
-struct RectShapeComponent;
+
 
 struct TransformComponent {
 	float x, y;
@@ -43,6 +43,13 @@ struct VelocityComponent {
 
 struct AccelerationComponent {
 	float ax, ay;
+};
+
+struct RectShapeComponent {
+	float width, height;
+	SDL_Color color;
+	int  drawOrder;
+	bool visible;
 };
 
 struct registry {
@@ -58,23 +65,6 @@ struct registry {
 extern registry reg;
 void updateMovement(float deltaTime, registry& reg);
 void renderRectShape(registry& reg);
-
-
-struct RectShapeComponent {
-	float width, height;
-	SDL_Color color;  // default white
-	int drawOrder;
-	bool visible;
-
-private:
-	SDL_Texture* texture = nullptr;
-	bool textureNeedsUpdate = true;
-
-	friend void UpdateRectTexture(RectShapeComponent&);
-	friend void renderRectShape(registry&);
-	friend void cleanupTextures(registry&);
-};
-RectShapeComponent createRectShape(float width, float height, SDL_Color color, int drawOrder, bool visible);
 
 
 // Function to create a new surface
