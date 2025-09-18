@@ -223,7 +223,7 @@ void updateMovement(float deltaTime, registry& reg) {
 			auto& velocity = reg.velocityComponents[entity];
 			transform.x += velocity.vx * deltaTime;
 			transform.y += velocity.vy * deltaTime;
-            //printf("Only velocity");
+            printf("Only velocity");
 		}
         else if (reg.transformComponents.find(entity) != reg.transformComponents.end() and
             reg.velocityComponents.find(entity) != reg.velocityComponents.end() and
@@ -231,16 +231,13 @@ void updateMovement(float deltaTime, registry& reg) {
 			auto& transform = reg.transformComponents[entity];
 			auto& velocity = reg.velocityComponents[entity];
             auto& acceleration = reg.accelerationComponents[entity];
-            //printf("Accelerated");
+            printf("Accelerated");
 
-            transform.x += velocity.vx * deltaTime + 0.5 * acceleration.ax * deltaTime * deltaTime;
-            transform.y += velocity.vy * deltaTime + 0.5 * acceleration.ay * deltaTime * deltaTime;
+            velocity.vx += acceleration.ax * deltaTime;
+            velocity.vy += acceleration.ay * deltaTime;
 
-			velocity.vx += acceleration.ax * deltaTime;
-			velocity.vy += acceleration.ay * deltaTime;
-
-            std::cout << velocity.vx + velocity.vy;
-            printf("\n");
+            transform.x += 0.5 * acceleration.ax * deltaTime * deltaTime;
+            transform.y += 0.5 * acceleration.ay * deltaTime * deltaTime;
 
         }
     }
