@@ -50,7 +50,7 @@ struct registry {
 	std::unordered_map<Entity, TransformComponent> transformComponents;
 	std::unordered_map<Entity, VelocityComponent> velocityComponents;
 	std::unordered_map<Entity, AccelerationComponent> accelerationComponents;
-	
+
 	std::unordered_map<Entity, RectShapeComponent> rectShapeComponents;
 	std::vector<std::pair<Entity, RectShapeComponent*>> drawList;
 };
@@ -84,11 +84,11 @@ extern std::map<std::string, SDL_Surface*> surfaces;
 // Function to load a texture from a file (sprite rendering)
 struct SpriteData {
 	const char* filepath;
-    SDL_Rect image_load_part;
-    SDL_FRect screen_render_part;
-    bool visible;
-    int depth;
-    float angle;
+	SDL_Rect image_load_part;
+	SDL_FRect screen_render_part;
+	bool visible;
+	int depth;
+	float angle;
 };
 extern std::map<std::string, std::vector<SpriteData>> spritesMap;
 void loadSprite(std::string name, bool visible, const char* filepath, SDL_Rect image_load_part, SDL_FRect screen_render_part, int depth, float angle);

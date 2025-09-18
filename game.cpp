@@ -26,37 +26,37 @@ int getRandomNumber(int min, int max) {
 int main(int argc, char* argv[]) {
 
     if (!initEngine("My Fruit Basket", 800, 550, true)) return -1;
-	bool running = true;
+    bool running = true;
 
     int random_x_coord = getRandomNumber(50, 750);
     //std::cout<< "created first enemy" + enemy_str;
     enemy_number++;
-    
+
 
     //Render the rectangle
-	Entity dum = createEntity();
-	reg.transformComponents[dum] = { 100, 100, 0 };
-	reg.rectShapeComponents[dum] = createRectShape(50, 50, { 255, 0, 0, 255 }, 1, true);
-	reg.velocityComponents[dum] = { 2, 5 };
-	//reg.accelerationComponents[dum] = { 0, 0 };
+    Entity dum = createEntity();
+    reg.transformComponents[dum] = { 100, 100, 0 };
+    reg.rectShapeComponents[dum] = createRectShape(50, 50, { 255, 0, 0, 255 }, 1, true);
+    reg.velocityComponents[dum] = { 2, 5 };
+    //reg.accelerationComponents[dum] = { 0, 0 };
 
     Entity background = createEntity();
     reg.rectShapeComponents[background] = createRectShape(800, 550, { 120, 60, 255, 255 }, 0, true);
     reg.transformComponents[background] = { 0, 0, 10 };
-	reg.velocityComponents[background] = { 3, 3 };
-	//reg.accelerationComponents[background] = { 0, 0 };
+    reg.velocityComponents[background] = { 3, 3 };
+    //reg.accelerationComponents[background] = { 0, 0 };
 
     Entity o = createEntity();
-	reg.rectShapeComponents[o] = createRectShape(50, 50, { 120, 250, 25, 255 }, 2, true);
-	reg.transformComponents[o] = { 60, 60, 10 };
-	reg.velocityComponents[o] = { 0, 0 };
+    reg.rectShapeComponents[o] = createRectShape(50, 50, { 120, 250, 25, 255 }, 2, true);
+    reg.transformComponents[o] = { 60, 60, 10 };
+    reg.velocityComponents[o] = { 0, 0 };
     //reg.accelerationComponents[o] = { 0, 0 };
 
     loadSprite("basket", true, "assets/basket2.bmp", { 0, 0, 32, 32 }, { 100, 100, 32, 32 }, 1, 45);
-    
+
     while (running)
     {
-        running = processInput();      
+        running = processInput();
 
         if (KeyDown("A")) {
             //reg.transformComponents[o].x += 2;
@@ -72,27 +72,27 @@ int main(int argc, char* argv[]) {
             //reg.accelerationComponents[o].ax = 0;
             //printf("up");
         }
-		if (KeyDown("D")) {
-			reg.velocityComponents[o].vx = 100;
+        if (KeyDown("D")) {
+            reg.velocityComponents[o].vx = 100;
             //reg.accelerationComponents[o].ax = -1;
-			reg.transformComponents[o].rotation -= 80;
+            reg.transformComponents[o].rotation -= 80;
             cout << reg.velocityComponents[o].vx;
-			//printf("Down");
-		}
-		else if (KeyUp("D")) {
-			reg.velocityComponents[o].vx = 0;
+            //printf("Down");
+        }
+        else if (KeyUp("D")) {
+            reg.velocityComponents[o].vx = 0;
             //reg.accelerationComponents[o].ax = 0;
-			//printf("up");
-		}
+            //printf("up");
+        }
 
         /*if (reg.velocityComponents[player].vy >= 15) {
             reg.accelerationComponents.erase(player);
             reg.velocityComponents[player].vy = 0;
-            
+
         }*/
 
         renderRectShape(reg);
-		dt = getDeltaTime();
+        dt = getDeltaTime();
         updateMovement(dt, reg);
 
         renderAllSprites();
@@ -100,8 +100,8 @@ int main(int argc, char* argv[]) {
         setFrameRate(60);
         updateScreen();
         forceFrameLimit();
-        
+
     }
-	shutdownEngine();
-  return 0;
-} 
+    shutdownEngine();
+    return 0;
+}
